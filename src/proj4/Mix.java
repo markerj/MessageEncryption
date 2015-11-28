@@ -14,13 +14,12 @@ import java.util.Scanner;
 
 public class Mix implements IMix {
 
-	/** Linked list of characters representing a message (string) */ 
 	private LinkedList message;
 	private LinkedListNum numbers;
 	public char[] charMsg;
 	public int[] nums;
 	public boolean mixing = true;
-	public boolean isPaste = false;
+	public boolean isSaved = false;
 	//String[] commandsArray;
 	//ArrayList<String> clipBoard;
 	String finalMsg;
@@ -55,11 +54,12 @@ public class Mix implements IMix {
 			processCommand(s1);
 			i++;
 			createNumsLL();
-			
+			if(isSaved == false) {
 			numbers.displayNum();
 			System.out.println();
 			message.display();
 			System.out.println();
+			}
 			
 		}
 	}
@@ -152,8 +152,7 @@ public class Mix implements IMix {
 			i2--;
 			insertBefore(copiedChars.get(i2), pos);
 		}
-		isPaste = true;
-		//message.display();
+	
 	}
 
 	@Override
@@ -233,7 +232,11 @@ public class Mix implements IMix {
 		{
 			PrintWriter pr = new PrintWriter(fileName+".txt");    
 
+			elements.remove(elements.size()-1);
+			elements.remove(elements.size()-1);
+			
 			elements.add(finalMsg);
+			
 			pr.println(elements);
 		
 			//pr.println(finalMsg);
@@ -245,7 +248,8 @@ public class Mix implements IMix {
 			System.out.println("No such file exists.");
 		}
 		mixing = false;
-		System.out.println("Mixed Message and Commands saved to "+fileName+".txt");
+		isSaved = true;
+		System.out.println("Mixed Message and Commands saved to "+"Key"+".txt");
 	}
 
 	@Override
