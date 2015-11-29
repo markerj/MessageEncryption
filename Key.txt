@@ -1,1 +1,1 @@
-[r 5, r 6, r 7, alskdasndlkan]
+[add(1|h), add(7|a), add(6| ), tis is message]

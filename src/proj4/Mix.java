@@ -27,6 +27,7 @@ public class Mix implements IMix {
 	ArrayList<Character> copiedChars;
 
 	public static void main(String[] args) {
+		
 		Mix Prog = new Mix();
 		Prog.runMixer();
 
@@ -48,6 +49,7 @@ public class Mix implements IMix {
 			System.out.print("command: ");
 			String s1 = scan.nextLine();
 			elements.add(s1);
+			System.out.println("in the mixer method: " + elements);
 			//clipBoard.add(s1);
 			//commandsArray[i] = s1;
 
@@ -64,9 +66,18 @@ public class Mix implements IMix {
 		}
 	}
 	public void removeAtPosition(int pos) {
+		
+		char charToAdd = message.get(pos);
+		char lpar = '(';
+		char rpar = ')';
+		
+		String undoCmd = ("add" + lpar + pos + "|" + charToAdd + rpar);
+
+		elements.add(undoCmd);
 		message.remove(pos);
-		//message.display();
-		//System.out.println();
+		
+		System.out.println("in the remove method: " + elements);
+		
 	}
 
 	public void quit() {
@@ -234,9 +245,11 @@ public class Mix implements IMix {
 
 			elements.remove(elements.size()-1);
 			elements.remove(elements.size()-1);
-			
+			for(int i = 0; i < elements.size()-1; i++){
+			elements.remove(elements.get(i));
+			}
 			elements.add(finalMsg);
-			
+			System.out.println("its writing if list here: " +elements);
 			pr.println(elements);
 		
 			//pr.println(finalMsg);
@@ -245,7 +258,7 @@ public class Mix implements IMix {
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("No such file exists.");
+			
 		}
 		mixing = false;
 		isSaved = true;
