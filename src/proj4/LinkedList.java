@@ -55,7 +55,7 @@ public class LinkedList {
 			// point past first link if top is the index
 			top = top.next;
 		} else {
-			// look through list,
+			// parse through list,
 			// find link before the one we wish to remove, index-1
 			// find desired link to jump
 			Link current = top;

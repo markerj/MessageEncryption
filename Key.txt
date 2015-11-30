@@ -1,1 +1,1 @@
-[add(1|h), add(7|a), add(6| ), tis is message]
+[copy(8| is a me), paste(4|8), addIb(4|g), addIb(2|k), addR(1|k), addR(7| ), thig isa mes is a message right hurr again again]

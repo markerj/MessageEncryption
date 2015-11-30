@@ -20,6 +20,9 @@ public class Mix implements IMix {
 	public int[] nums;
 	public boolean mixing = true;
 	public boolean isSaved = false;
+	public boolean isPasting = false;
+	public boolean isPastingInIb = false;
+	public boolean isCutting = false;
 	//String[] commandsArray;
 	//ArrayList<String> clipBoard;
 	String finalMsg;
@@ -27,7 +30,7 @@ public class Mix implements IMix {
 	ArrayList<Character> copiedChars;
 
 	public static void main(String[] args) {
-		
+
 		Mix Prog = new Mix();
 		Prog.runMixer();
 
@@ -41,14 +44,17 @@ public class Mix implements IMix {
 
 		String s = scan.nextLine();
 		setInitialMessage(s);
-	
+
 		System.out.println();
-		
+
 		int i =0;
 		while (mixing == true){
 			System.out.print("command: ");
 			String s1 = scan.nextLine();
+			if (isPastingInIb != true){
 			elements.add(s1);
+			}
+			
 			System.out.println("in the mixer method: " + elements);
 			//clipBoard.add(s1);
 			//commandsArray[i] = s1;
@@ -57,27 +63,28 @@ public class Mix implements IMix {
 			i++;
 			createNumsLL();
 			if(isSaved == false) {
-			numbers.displayNum();
-			System.out.println();
-			message.display();
-			System.out.println();
+				numbers.displayNum();
+				System.out.println();
+				message.display();
+				System.out.println();
 			}
-			
+			System.out.println("in the mixer method: " + elements);
+
 		}
 	}
 	public void removeAtPosition(int pos) {
-		
+
 		char charToAdd = message.get(pos);
 		char lpar = '(';
 		char rpar = ')';
-		
-		String undoCmd = ("add" + lpar + pos + "|" + charToAdd + rpar);
+
+		String undoCmd = ("addR" + lpar + pos + "|" + charToAdd + rpar);
 
 		elements.add(undoCmd);
 		message.remove(pos);
-		
+
 		System.out.println("in the remove method: " + elements);
-		
+
 	}
 
 	public void quit() {
@@ -108,13 +115,35 @@ public class Mix implements IMix {
 		return message.get(pos);
 	}
 	public void insertBefore(char c, int pos) {
-		message.insertBeforeIndex(c, pos);
-		//message.display();
-		//System.out.println();
+		
+		//char charToAdd = message.get(pos);
+		char lpar = '(';
+		char rpar = ')';
+
+		String undoCmd = ("addIb" + lpar + pos + "|" + c + rpar);
+		if(isPastingInIb == false) {
+		elements.add(undoCmd);
+		
+		}
+		
+		message.insertBeforeIndex(c, pos-1);
+		
+		System.out.println("in the insert method: " + elements);
+	
 	}
 
 	public void switchAt(int pos, char c) {
+
+		char lpar = '(';
+		char rpar = ')';
+		char oldChar = message.get(pos);
+		System.out.println("oldChar:" + oldChar);
+		String undoCmd = ("addS" + lpar + pos + "|" + oldChar + rpar);
+
+		elements.add(undoCmd);
 		message.switchIt(pos, c);
+		//have to get element at pos and then pass that to undo
+		System.out.println("in the switch method: " + elements);
 		//message.display();
 		//System.out.println();
 	}
@@ -137,6 +166,23 @@ public class Mix implements IMix {
 
 			i1++;
 		}
+		
+		char lpar = '(';
+		char rpar = ')';
+		//pass copied chars for undo, have to pass starting pos as well
+
+		char[] charsUndo = new char[copiedChars.size()];
+		for (int y = 0; y < copiedChars.size(); y ++) {		
+			charsUndo[y] = copiedChars.get(y);
+		}
+		//convert to a string to remove delims ....
+		String intoString = new String(charsUndo);
+		
+		int sizeOfString = intoString.length();
+		
+		String undoCmd = ("copy" + lpar + pos + "|" + intoString + rpar);
+		elements.add(undoCmd);
+
 		//message.display();
 
 		System.out.println("clipBoard: " +copiedChars);
@@ -150,11 +196,44 @@ public class Mix implements IMix {
 		while (i < pos2){
 			copiedChars.add(getChar(i));
 			i++;
-
 		}
 		System.out.println("clipBoard: " +copiedChars);
+		char lpar = '(';
+		char rpar = ')';
+		//pass copied chars for undo, have to pass starting pos as well
+
+		char[] charsUndo = new char[copiedChars.size()];
+		for (int y = 0; y < copiedChars.size(); y ++) {		
+			charsUndo[y] = copiedChars.get(y);
+		}
+		//convert to a string to remove delims ....
+		String intoString = new String(charsUndo);
+		int sizeOfString = intoString.length();
+		String undoCmd = ("copy" + lpar + sizeOfString + "|" + intoString + rpar);
+		elements.add(undoCmd);
+
+	}
+	public void isCutting(boolean bool) {
+		if (bool == true)
+		{
+			isCutting = true;
+		}
+		if (bool == false) {
+		isCutting = false;
+		}
+	}
+	public void isPastingIb(boolean bool) {
+		if (bool == true)
+		{
+			isPastingInIb = true;
+		}
+		if (bool == false) {
+		isPastingInIb = false;
+		}
 	}
 	public void paste(int pos) {
+		//isPasting = true;
+		isPastingIb(true);
 		//int i = 0;
 		int i2 = copiedChars.size();
 		while(i2 > 0){
@@ -163,6 +242,17 @@ public class Mix implements IMix {
 			i2--;
 			insertBefore(copiedChars.get(i2), pos);
 		}
+		char lpar = '(';
+		char rpar = ')';
+        //maybe pass clip size from here
+		int lenOC= copiedChars.size();
+		String lengthOfCopy = Integer.toString(lenOC);
+				
+		String undoCmd = ("paste" + lpar + pos + "|" + lengthOfCopy + rpar);
+
+		elements.add(undoCmd);
+		isPastingIb(false);
+		
 	
 	}
 
@@ -246,19 +336,19 @@ public class Mix implements IMix {
 			elements.remove(elements.size()-1);
 			elements.remove(elements.size()-1);
 			for(int i = 0; i < elements.size()-1; i++){
-			elements.remove(elements.get(i));
+				elements.remove(elements.get(i));
 			}
 			elements.add(finalMsg);
 			System.out.println("its writing if list here: " +elements);
 			pr.println(elements);
-		
+
 			//pr.println(finalMsg);
 			pr.close();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			
+
 		}
 		mixing = false;
 		isSaved = true;
@@ -281,33 +371,33 @@ public class Mix implements IMix {
 
 		numbers = new LinkedListNum();
 		for (int i = 1; i < size2; i++) {
-		
+
 			numbers.add(nums[i]);
-			
+
 		}
-		
+
 		System.out.println("Message:");
 		message = new LinkedList();
 		for(int i = 0; i < msgLength; i++) {
 			message.add(charMsg[i]);
 		}
-		
+
 		numbers.displayNum();
 		System.out.println();
 		message.display();
 	}
 	public void createNumsLL() {
-		
+
 		int size = message.getSize()+1;
 		nums = new int[size];
 		for (int i = 0; i < size; i++) {
 			nums[i] = i;
 		}
-		
+
 		numbers = new LinkedListNum();
 		for (int i = 1; i < size; i++) {
 			numbers.add(nums[i]);
-	
+
+		}
 	}
-}
 }
