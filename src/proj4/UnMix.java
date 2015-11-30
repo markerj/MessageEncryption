@@ -163,18 +163,39 @@ public class UnMix {
 				}
 
 			}
+			if (commands.get(i).contains("cut")) {
+				System.out.println("in cut");
+				String loc = commands.get(i).substring(4,5);
+				int locToPaste = Integer.parseInt(loc);
+				String sizeOfCopy = commands.get(i).substring(6,7);
+				int theSize = Integer.parseInt(sizeOfCopy);
+			
+				String theChars = commands.get(i).substring(8,8+theSize);
+				char[] charArray = theChars.toCharArray();
+				int dec2 = 0;
+				for (int y = 0; y < theSize; y++) {
+					System.out.println("in cut2");
+					clipBoard.add(charArray[y]);	
+					System.out.println(clipBoard);
+				}
+				
+			//clipBoard has [ , i, s, , a, ]
+				for (int z = theSize-1; z >=0; z--){
+					
+					System.out.println("in cut" + z);
+				theMessage.add(locToPaste - 2,clipBoard.get(z));
+				System.out.println(theMessage);
+				
+				}
+			}
 			if (commands.get(i).contains("paste")) {
-			int d = 0;
+		
 				//have to remove same element theLen times
 				String loc = commands.get(i).substring(6,7);
 				int locToUnpaste = Integer.parseInt(loc);
 				String len = commands.get(i).substring(8,9);
 				int theLen = Integer.parseInt(len);
 				
-				
-				//getCbSize;
-				//setCbSize(5);
-
 				int g = 0;
 				while (g < theLen){
 
@@ -193,9 +214,10 @@ public class UnMix {
 
 		System.out.println("clipBoard: " + clipBoard);
 		System.out.println(theMessage);
+		
 		String finalString = theMessage.toString();
-		join(finalString);
-		System.out.println("The original Message is: " +finalString);
+		
+		//System.out.println("The original Message is: " +finalString);
 
 	}
 	public void setCbSize(int size) {

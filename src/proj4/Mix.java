@@ -51,7 +51,7 @@ public class Mix implements IMix {
 		while (mixing == true){
 			System.out.print("command: ");
 			String s1 = scan.nextLine();
-			if (isPastingInIb != true){
+			if (isPastingInIb != true && isCutting != true){
 			elements.add(s1);
 			}
 			
@@ -79,8 +79,9 @@ public class Mix implements IMix {
 		char rpar = ')';
 
 		String undoCmd = ("addR" + lpar + pos + "|" + charToAdd + rpar);
-
+		if(isCutting == false) {
 		elements.add(undoCmd);
+		}
 		message.remove(pos);
 
 		System.out.println("in the remove method: " + elements);
@@ -148,7 +149,7 @@ public class Mix implements IMix {
 		//System.out.println();
 	}
 	public void cut(int pos, int pos2) {
-
+		isCutting(true);
 		copiedChars = new ArrayList<>();
 		int i = pos-1;
 		while (i < pos2){
@@ -177,15 +178,13 @@ public class Mix implements IMix {
 		}
 		//convert to a string to remove delims ....
 		String intoString = new String(charsUndo);
-		
 		int sizeOfString = intoString.length();
-		
-		String undoCmd = ("copy" + lpar + pos + "|" + intoString + rpar);
+		int pos3 = pos +1;
+		String undoCmd = ("cut" + lpar + pos3 + "|" + sizeOfString + "|" + intoString+ rpar);
 		elements.add(undoCmd);
 
-		//message.display();
-
 		System.out.println("clipBoard: " +copiedChars);
+		isCutting(false);
 	}
 	public void copy(int pos, int pos2) {
 		//how long to parse through list
