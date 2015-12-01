@@ -1,69 +1,112 @@
-package proj4;
+/*****************************************************************
+Decrypts the encrypted message taken from a file that mix class 
+wrote to. File contains the information to undo the mixed message
+and the mixed message itself.
 
+@author John Marker
+@version Fall 2015
+ *****************************************************************/
+package proj4;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-
 public class UnMix {
+
+	/** linkedlist holding the mixed and eventually unmixed message */
 	LinkedList theMessage;
+
+	/** String array holding chars */
 	String[] informationArray;
+
+	/** ArrayList holding commands read from file */
 	ArrayList<String> temps;
+
+	/** ArrayList holding more commands read from file */
 	ArrayList<String> needed;
+
+	/** ArrayList holding final commands useful for this class */
 	ArrayList<String> commands;
+
+	/** holds size of theMessage */
 	int size;
+
+	/** holds the encrypted msg after being read from file
+	 * and seperated from undo commands */
 	String encryptedMsg;
+
+	/** holds the file name given by the user from scanner */
 	String theFile;
+
+	/** char array holding each char of msg */
 	char[] msgChar;
+
+	/** ArrayList holding the characters copied by cut or copy */
 	ArrayList<Character> clipBoard;
+
+	/** holds the size of clipboard */
 	int sizeOfClipB = 0;
 
+	/*****************************************************************
+	encapsulation needs to be fixed
+	 *****************************************************************/
 
-	//public static String fName = "Key";
 	String UnMixUsingFile (String mixedMessage) {
 
+		//this isn't necessary
 		return mixedMessage;	
 	}
-	public static void main(String[] args) {
 
-		//instead of passing commands, pass the undo commands
+
+
+	/*****************************************************************
+	main creates a new UnMix and runs the UnMixer method
+	 *****************************************************************/
+	public static void main(String[] args) {
 
 		UnMix Prog2 = new UnMix();
 		Prog2.runUnMixer();
 
 	}
 
+
+	/*****************************************************************
+	instantiates needed ArrayLists and gets user input to find
+	the file, reads in the file by calling appropriate method,
+	decodes the message by taking values from the file and 
+	organizing them into arrayLists, and manipulating them based
+	on what each undo command and given message contains.
+	 *****************************************************************/
 	public void runUnMixer() {
 
-		System.out.println("Enter file name to retrieve encrypted message");
+		System.out.println("Enter file name to retrieve encrypted message and decrypt it:");
 		clipBoard = new ArrayList<Character>();
 		commands = new ArrayList<String>();
 		temps = new ArrayList<String>();
 		Scanner scan = new Scanner(System.in);
 		String s = scan.nextLine();
 		theFile = s;
-
-
 		try {
 			readMixed(theFile);
-		} catch (IOException e) {
-
-			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			System.out.println("No Such File");
+			runUnMixer();
+		}
+		catch (IOException e) {
+			System.out.println("Can't do this");
+			runUnMixer();
 		}
 
 		size = temps.size()-1;
-		//System.out.println(temps.get(size));
 		encryptedMsg = temps.get(size);
-		//System.out.println(encryptedMsg.length());
-		encryptedMsg = encryptedMsg.substring(1, encryptedMsg.length()-3);
-		System.out.println("Encrypted message in " +theFile+ ".txt:" + encryptedMsg);
 
+		encryptedMsg = encryptedMsg.substring(1, encryptedMsg.length()-3);
+		System.out.println("Encrypted message in " +theFile+ ".txt: " + encryptedMsg);
 		int sizeOfMsg = encryptedMsg.length();
 		theMessage = new LinkedList();
-		//charMsg = new char[];
-		String string = "JavaCodeGeeks";
 		char[] charMsg = encryptedMsg.toCharArray();
 
 		for (int i = 0; i < sizeOfMsg; i++ ) {
@@ -83,12 +126,11 @@ public class UnMix {
 			String each2 = each1.replace('|',',');
 			commands.add(each2);
 
-			//	System.out.println("each " + each2);
 		}
 		System.out.println("commands: " + commands);
-		// for each
-		//change first to each
 
+		//for each
+		//change first to each
 		//must increase position when char is added to list,
 		//represented with inc added to pos ....
 		int inc = 0;
@@ -122,8 +164,6 @@ public class UnMix {
 				int posToRem = Integer.parseInt(forInt);
 				//dec--;
 				theMessage.remove(posToRem-1);
-				//	theMessage.remove(2);
-
 				//System.out.println(theMessage);
 			}
 			if (commands.get(i).contains("addS")) {
@@ -157,50 +197,41 @@ public class UnMix {
 
 				for (int y = 0; y < theSize; y++) {
 					clipBoard.add(charArray[y]);
-					//sizeOfClipB = clipBoard.size();
 					sizeOfClipB++;
 					setCbSize(sizeOfClipB);
 				}
 
 			}
 			if (commands.get(i).contains("cut")) {
-			
+
 				String loc = commands.get(i).substring(4,5);
 				int locToPaste = Integer.parseInt(loc);
 				String sizeOfCopy = commands.get(i).substring(6,7);
 				int theSize = Integer.parseInt(sizeOfCopy);
-			
+
 				String theChars = commands.get(i).substring(8,8+theSize);
 				char[] charArray = theChars.toCharArray();
 				int dec2 = 0;
 				for (int y = 0; y < theSize; y++) {
-					
 					clipBoard.add(charArray[y]);	
-					
 				}
-				
-			//clipBoard has [ , i, s, , a, ]
 				for (int z = theSize-1; z >=0; z--){
-					
-					
-				theMessage.add(locToPaste - 2,clipBoard.get(z));
-				
-				
+					theMessage.add(locToPaste - 2,clipBoard.get(z));
 				}
 			}
 			if (commands.get(i).contains("paste")) {
-		
+
 				//have to remove same element theLen times
 				String loc = commands.get(i).substring(6,7);
 				int locToUnpaste = Integer.parseInt(loc);
 				String len = commands.get(i).substring(8,9);
 				int theLen = Integer.parseInt(len);
-				
+
 				int g = 0;
 				while (g < theLen){
 
 					//System.out.println(g);
-					
+
 					g++;
 					theMessage.remove(locToUnpaste-1);
 
@@ -209,44 +240,55 @@ public class UnMix {
 			}
 			//cut is where i need to use what is on the clipBoard.
 			//cut means to add the clipboard to the list
-
 		}
-
 		System.out.println("clipBoard: " + clipBoard);
-		System.out.println(theMessage);
-		
+	//	System.out.println(theMessage);
+		//convert linkedlist to a final message
 		char[] array = new char[theMessage.size()];
 		for (int i = 0; i < theMessage.size(); i++) {
-		    array[i] = (char) theMessage.get(i);
+			array[i] = (char) theMessage.get(i);
 		}
-	
 		String finalString = new String(array);
-	
-		System.out.println("The original Message is: " +finalString);
-
+		System.out.println("The original Message was: " +finalString);
 	}
+
+
+	/*****************************************************************
+	sets the clipBoard size
+	@param size to be set
+	 *****************************************************************/
 	public void setCbSize(int size) {
+
 		sizeOfClipB = size;
 	}
+
+
+	/*****************************************************************
+	gets the size of clipboard
+	@return the size of the clipboard
+	 *****************************************************************/
 	public int getCbSize() {
+
 		return sizeOfClipB;
 	}
 
-	public void readMixed(String theFile) throws IOException {
-		//if thefile is wrong file name, no such file will be found
 
+
+	/*****************************************************************
+	reads the file given by user input from scanner
+	@param theFile si the name of the file given by the user
+	 *****************************************************************/
+	public void readMixed(String theFile) throws FileNotFoundException {
+
+		//if thefile is wrong file name, no such file will be found
 		String each = "";
 		Scanner inFile1 = new Scanner(new File(theFile + ".txt")).useDelimiter(",");
 
 		while (inFile1.hasNext()) {
-
 			each = inFile1.next();
-
 			temps.add(each);
 
 		}
-		//	System.out.println("temps " + temps);
-
 		inFile1.close();
 
 	}

@@ -1,1 +1,1 @@
-[addR(5|i), copy(4| s g), paste(2|4), addR(3| ), addS(5|i), addIb(7|y), addR(3|g), addR(7| ), t shtyss going to be encrypted now]
+[addR(1|h), tis is the message here]
