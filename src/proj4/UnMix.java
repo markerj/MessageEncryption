@@ -49,18 +49,18 @@ public class UnMix {
 
 	/** holds the size of clipboard */
 	int sizeOfClipB = 0;
+	
+	/** holds the final message */
+	String finalMessage = null;
 
 	/*****************************************************************
 	encapsulation needs to be fixed
 	 *****************************************************************/
 
-	String UnMixUsingFile (String mixedMessage) {
-
-		//this isn't necessary
-		return mixedMessage;	
+	String UnMixUsingFile (String unMixedMessage) {
+		String finalUnmixedMsg= unMixedMessage;
+		return finalUnmixedMsg;	
 	}
-
-
 
 	/*****************************************************************
 	main creates a new UnMix and runs the UnMixer method
@@ -242,7 +242,7 @@ public class UnMix {
 			//cut means to add the clipboard to the list
 		}
 		System.out.println("clipBoard: " + clipBoard);
-	//	System.out.println(theMessage);
+		//	System.out.println(theMessage);
 		//convert linkedlist to a final message
 		char[] array = new char[theMessage.size()];
 		for (int i = 0; i < theMessage.size(); i++) {
@@ -250,6 +250,8 @@ public class UnMix {
 		}
 		String finalString = new String(array);
 		System.out.println("The original Message was: " +finalString);
+		UnMixUsingFile(finalString);
+		finalMessage = finalString;
 	}
 
 

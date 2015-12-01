@@ -94,8 +94,11 @@ public class Mix implements IMix {
 		Scanner scan = new Scanner(System.in);
 
 		System.out.println("Enter message to be encrypted");
-
 		String s = scan.nextLine();
+		if (s.length()< 1) {
+			System.out.println("That's not a very useful message");
+			runMixer();
+		}
 		setInitialMessage(s);
 		System.out.println();
 		int i =0;
@@ -123,7 +126,7 @@ public class Mix implements IMix {
 				elements.remove(s1);
 			}
 			catch (StringIndexOutOfBoundsException e){
-				System.out.println("enter a command");
+				System.out.println("incomplete command");
 				elements.remove(s1);
 			}
 
@@ -488,7 +491,7 @@ public class Mix implements IMix {
 				String fileN = command.substring(2,command.length());
 				saveToText(fileN);
 			}
-			
+
 			if(!command.substring(0,1).contains("Q")&&
 					(!command.substring(0,1).contains("r")) &&
 					(!command.substring(0,1).contains("p")) &&
@@ -502,6 +505,9 @@ public class Mix implements IMix {
 			}
 
 			if(command.length() < 2 && !command.substring(0,1).contains("Q")){
+				throw new ArrayIndexOutOfBoundsException();
+			}
+			if(command.length() < 2 && command.substring(0,1).contains("s")){
 				throw new ArrayIndexOutOfBoundsException();
 			}
 			if(command.length() < 1){

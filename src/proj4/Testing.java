@@ -2,9 +2,91 @@ package proj4;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
+
 import org.junit.Test;
 
 public class Testing {
+
+	@Test
+	public void testMultipleInput1() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("messagehere");	
+		m.processCommand("r 1");
+		m.processCommand("r 2");
+		m.processCommand("Q");
+		System.out.println(m.finalMsg);
+		assertEquals(m.finalMsg, "esagehere");
+	}
+
+	@Test
+	public void testMultipleInput2() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("messagehere");	
+		m.processCommand("b t 1");
+		m.processCommand("w 1 g");
+		m.processCommand("Q");
+		System.out.println(m.finalMsg);
+		assertEquals(m.finalMsg, "gmessagehere");
+
+	}
+	@Test
+	public void testMultipleInput3() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("messagehere");	
+		m.processCommand("r 5");
+		m.processCommand("w 8 h");
+		m.processCommand("r 2");
+		m.processCommand("Q");
+		System.out.println(m.finalMsg);
+		assertEquals(m.finalMsg, "mssgehhre");
+
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void testMultipleInput4() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("messagehere");	
+		m.processCommand("r 5");
+		m.processCommand("w 8 h");
+		m.processCommand("kljdsfkljsadbfa");
+		m.processCommand("r 2");
+		m.processCommand("Q");
+		System.out.println(m.finalMsg);
+		assertEquals(m.finalMsg, "mssgehhre");
+
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void RandomUserInput() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("1212");
+
+
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void RandomUserInput2() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("4747474");
+
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void RandomUserInput3() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("-888");
+
+
+	}
 
 	@Test
 	public void testCommandsRemove() {
@@ -127,96 +209,7 @@ public class Testing {
 	}
 
 
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSideRange() {
 
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("x 5 8");
-		m.processCommand("Q");
-
-		assertEquals(m.finalMsg, "mess");
-
-	}
-	@Test
-	//@Test(expected=NumberFormatException.class)
-	public void testCommandsOutSidePos() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("r ---");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
-
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSidePos1() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("r 66");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSidePos2() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("r -17");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSidePos3() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("b -3 t");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSidePos4() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("b 99 t");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSidePos5() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("w 73 t");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
-	@Test
-	//@Test(expected=NullPointerException.class)
-	public void testCommandsOutSidePos6() {
-
-		Mix m = new Mix();
-		m.setInitialMessage("mess");	
-		m.processCommand("w -55 t");
-		m.processCommand("Q");
-		assertEquals(m.finalMsg, "mess");
-
-	}
 	@Test
 	public void testRandomCommands() {
 
@@ -316,39 +309,184 @@ public class Testing {
 		assertEquals(m.finalMsg, "message");
 
 	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void RandomUserInput() {
+
+
+	public void BadUserInput() {
 
 		Mix m = new Mix();
 		m.setInitialMessage("message");
-		m.processCommand("1212");
+		m.processCommand("q 33");
 		System.out.println(m.finalMsg);
-		assertEquals(m.finalMsg, "message");
 
 	}
 	@Test(expected=IllegalArgumentException.class)
-	public void RandomUserInput2() {
+	public void BadUserInput1() {
 
 		Mix m = new Mix();
 		m.setInitialMessage("message");
-		m.processCommand("4747474");
-		System.out.println(m.finalMsg);
-		assertEquals(m.finalMsg, "message");
+		m.processCommand("kl ");
 
 	}
-	
 	@Test(expected=IllegalArgumentException.class)
-	public void RandomUserInput3() {
+	public void BadUserInput2() {
 
 		Mix m = new Mix();
 		m.setInitialMessage("message");
-		m.processCommand("-888");
+		m.processCommand("n 55");
 		System.out.println(m.finalMsg);
 
 	}
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void BadUserInput3() {
 
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("s");
+	}
+	@Test(expected=StringIndexOutOfBoundsException.class)
+	public void BadUserInput4() {
 
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("");
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void BadUserInput5() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("m 5");
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void BadUserInput6() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("t");
+	}
+	@Test(expected=IllegalArgumentException.class)
+	public void BadUserInput7() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("12");
+	}
+
+	@Test
+	//@Test(expected=NullPointerException.class)
+	public void testCommandsOutSideRange() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("x 5 8");
+		m.processCommand("Q");
+
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	//@Test(expected=NumberFormatException.class)
+	public void testCommandsOutSidePos() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("r ---");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+
+	@Test
+	//@Test(expected=NullPointerException.class)
+	public void testCommandsOutSidePos1() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("r 66");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	//@Test(expected=NullPointerException.class)
+	public void testCommandsOutSidePos2() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("r -17");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	//@Test(expected=NullPointerException.class)
+	public void testCommandsOutSidePos3() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("b -3 t");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	//@Test(expected=NullPointerException.class)
+	public void testCommandsOutSidePos4() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("b 99 t");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	//@Test(expected=NullPointerException.class)
+	public void testCommandsOutSidePos5() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("w 73 t");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	public void testCommandsOutSidePos6() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("w -55 t");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "mess");
+
+	}
+	@Test
+	public void testMultipleInput() {
+
+		Mix m = new Mix();
+		m.setInitialMessage("mess");	
+		m.processCommand("w -55 t");
+		m.processCommand("r 1");
+		m.processCommand("Q");
+		assertEquals(m.finalMsg, "ess");
+	}
+
+	//                     UNMIX
+
+	@Test(expected=FileNotFoundException.class)
+	public void testInputs2() throws FileNotFoundException {
+
+		Mix m = new Mix();
+		m.setInitialMessage("message");
+		m.processCommand("r 1");
+		m.processCommand("Q");	
+		m.processCommand("s Key5555");
+		UnMix u = new UnMix();
+		u.readMixed("randomfilename");
+		u.runUnMixer();
+		assertEquals(u.finalMessage, "message");
+	}
 
 
 }
