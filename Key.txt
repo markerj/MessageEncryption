@@ -1,1 +1,1 @@
-[addR(1|h), tis is the message here]
+[addR(3|s), addR(7|a), addR(1|h), ti is  message]

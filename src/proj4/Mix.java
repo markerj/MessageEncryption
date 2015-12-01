@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.rmi.AccessException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -51,7 +52,7 @@ public class Mix implements IMix {
 
 	/** boolean reprenting if the program has quit*/
 	public boolean quit = false;
-	
+
 	/** boolean reprenting if there is a new mixer*/
 	public boolean newMixer = false;
 
@@ -59,7 +60,7 @@ public class Mix implements IMix {
 	String finalMsg;
 
 	/** Holds the commands to undo the message */
-	ArrayList<String> elements;
+	ArrayList<String> elements = new ArrayList<>();
 
 	/** a clipboard of copied chars */
 	ArrayList<Character> copiedChars;
@@ -75,10 +76,10 @@ public class Mix implements IMix {
 
 		Mix Prog = new Mix();
 		Prog.runMixer();	
-		
+
 	}
 	public Mix() {
-	
+
 	}
 
 	/*****************************************************************
@@ -86,14 +87,14 @@ public class Mix implements IMix {
 	manipulates data from linkedlist based on the input
 	 *****************************************************************/
 	public void runMixer() {
-		
-		elements = new ArrayList<>();
+
+
 		//clipBoard = new ArrayList<>();
 		//commandsArray = new String[50];
 		Scanner scan = new Scanner(System.in);
-		
+
 		System.out.println("Enter message to be encrypted");
-		
+
 		String s = scan.nextLine();
 		setInitialMessage(s);
 		System.out.println();
@@ -102,15 +103,37 @@ public class Mix implements IMix {
 			System.out.print("command: ");
 			String s1 = scan.nextLine();
 
-			//booleans needed to seperate cutting and pasting
-			//from removing and inserting
 			if (isPastingInIb != true && isCutting != true){
 				elements.add(s1);
 			}
-		
-			processCommand(s1);
-			i++;
-			createNumsLL();
+
+			try {
+				processCommand(s1);
+				i++;
+				createNumsLL();
+
+			}
+
+			catch (IllegalArgumentException e){
+				System.out.println("invalid command");
+				elements.remove(s1);
+			}
+			catch (ArrayIndexOutOfBoundsException e){
+				System.out.println("incomplete command");
+				elements.remove(s1);
+			}
+			catch (StringIndexOutOfBoundsException e){
+				System.out.println("enter a command");
+				elements.remove(s1);
+			}
+
+
+			//booleans needed to seperate cutting and pasting
+			//from removing and inserting
+			//			if (isPastingInIb != true && isCutting != true){
+			//				elements.add(s1);
+			//			}
+
 
 			//booleans needed to stop user input
 			//when the user has quit and saved the message
@@ -362,75 +385,137 @@ public class Mix implements IMix {
 	@Override
 	public void processCommand(String command) {
 
-		//paste from saved charsArray ....
-		if(command.substring(0,1).contains("p")){
-			String cmd[] = command.split(" ");
-			String cmd2 = cmd[1];
-			int position1 = Integer.parseInt(cmd2);
-			paste(position1);
-		}
+		try{
+			//paste from saved charsArray ....
+			if(command.substring(0,1).contains("p")){
+				String cmd[] = command.split(" ");
+				String cmd2 = cmd[1];
+				int position1 = Integer.parseInt(cmd2);
 
-		//cut from list, save from pos to pos "x p p" ....
-		if(command.substring(0,1).contains("x")){
-			String cmd[] = command.split(" ");
-			String cmd2 = cmd[1];
-			String cmd3 = cmd[2];
-			int position1 = Integer.parseInt(cmd2);
-			int position2 = Integer.parseInt(cmd3);
-			cut(position1, position2);
-		}
+				if(position1 > 0){
+					paste(position1);
+				}
+				else {
+					System.out.println("invalid position");
+				}
+			}
 
-		//copy from pos to pos. "c p p" ....
-		if(command.substring(0,1).contains("c")){
-			String cmd[] = command.split(" ");
-			String cmd2 = cmd[1];
-			String cmd3 = cmd[2];
-			int position1 = Integer.parseInt(cmd2);
-			int position2 = Integer.parseInt(cmd3);
-			copy(position1, position2);
-		}
+			//cut from list, save from pos to pos "x p p" ....
+			if(command.substring(0,1).contains("x")){
+				String cmd[] = command.split(" ");
+				String cmd2 = cmd[1];
+				String cmd3 = cmd[2];
+				int position1 = Integer.parseInt(cmd2);
+				int position2 = Integer.parseInt(cmd3);
+				if(position1 > 0 && position2 > 0){
+					cut(position1, position2);
+				}
+				else {
+					System.out.println("invalid position");
+				}
+			}
 
-		//quit mixing ....
-		if(command.substring(0,1).contains("Q")){
-			quit();
-		}
+			//copy from pos to pos. "c p p" ....
+			if(command.substring(0,1).contains("c")){
+				String cmd[] = command.split(" ");
+				String cmd2 = cmd[1];
+				String cmd3 = cmd[2];
+				int position1 = Integer.parseInt(cmd2);
+				int position2 = Integer.parseInt(cmd3);
+				if(position1 > 0 && position2 > 0){
+					copy(position1, position2);
+				}
+				else {
+					System.out.println("invalid position");
+				}
+			}
 
-		// Remove a char at indicated position 
-		// note: pos-1 ....
-		if(command.substring(0,1).contains("r"))
+			//quit mixing ....
+			if(command.substring(0,1).contains("Q")){
+				quit();
+			}
+
+			// Remove a char at indicated position 
+			// note: pos-1 ....
+			if(command.substring(0,1).contains("r"))
+			{
+				String cmd[] = command.split(" ");
+				String cmd2 = cmd[1];
+				int pos = Integer.parseInt(cmd2);
+				if(pos > 0){
+					removeAtPosition(pos -1);
+				}
+				else {
+					System.out.println("invalid position");
+				}
+			}
+
+			//insert char 'c' before indicated pos ....
+			if(command.substring(0,1).contains("b"))
+			{
+				char c = command.charAt(2);
+				String cmd[] = command.split(" ");
+				String cmd3 = cmd[2];
+				int pos = Integer.parseInt(cmd3);
+				if(pos > 0){
+					insertBefore(c, pos);
+				}
+				else {
+					System.out.println("invalid position");
+				}
+			}
+
+			//switch char out at indicated pos ....
+			if(command.substring(0,1).contains("w"))
+			{
+				char c = command.charAt(4);
+				String cmd[] = command.split(" ");
+				String cmd2 = cmd[1];
+				int pos = Integer.parseInt(cmd2);
+
+				if(pos > 0){
+					switchAt(pos-1,c);
+				}
+				else {
+					System.out.println("invalid position");
+				}
+			}
+
+			//save to text file ....
+			if(command.substring(0,1).contains("s"))
+			{
+				//save commands, and final mixed msg
+				String fileN = command.substring(2,command.length());
+				saveToText(fileN);
+			}
+			
+			if(!command.substring(0,1).contains("Q")&&
+					(!command.substring(0,1).contains("r")) &&
+					(!command.substring(0,1).contains("p")) &&
+					(!command.substring(0,1).contains("b")) &&
+					(!command.substring(0,1).contains("x")) &&
+					(!command.substring(0,1).contains("c")) &&
+					(!command.substring(0,1).contains("w")) &&
+					(!command.substring(0,1).contains("s")))
+			{
+				throw new IllegalArgumentException();
+			}
+
+			if(command.length() < 2 && !command.substring(0,1).contains("Q")){
+				throw new ArrayIndexOutOfBoundsException();
+			}
+			if(command.length() < 1){
+				throw new StringIndexOutOfBoundsException();
+			}
+
+		}
+		catch(NumberFormatException e)
 		{
-			String cmd[] = command.split(" ");
-			String cmd2 = cmd[1];
-			int pos = Integer.parseInt(cmd2);
-			removeAtPosition(pos -1);
+			System.out.println("invalid input");
 		}
-
-		//insert char 'c' before indicated pos ....
-		if(command.substring(0,1).contains("b"))
+		catch(NullPointerException e) 
 		{
-			char c = command.charAt(2);
-			String cmd[] = command.split(" ");
-			String cmd3 = cmd[2];
-			int pos = Integer.parseInt(cmd3);
-			insertBefore(c, pos-1);
-		}
-
-		//switch char out at indicated pos ....
-		if(command.substring(0,1).contains("w"))
-		{
-			char c = command.charAt(4);
-			String cmd[] = command.split(" ");
-			String cmd2 = cmd[1];
-			int pos = Integer.parseInt(cmd2);
-			switchAt(pos-1,c);
-		}
-
-		//save to text file ....
-		if(command.substring(0,1).contains("s"))
-		{
-			//save commands, and final mixed msg
-			String fileN = command.substring(2,command.length());
-			saveToText(fileN);
+			System.out.println("outside of message range");
 		}
 	}
 
