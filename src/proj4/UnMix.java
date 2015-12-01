@@ -164,7 +164,7 @@ public class UnMix {
 
 			}
 			if (commands.get(i).contains("cut")) {
-				System.out.println("in cut");
+			
 				String loc = commands.get(i).substring(4,5);
 				int locToPaste = Integer.parseInt(loc);
 				String sizeOfCopy = commands.get(i).substring(6,7);
@@ -174,17 +174,17 @@ public class UnMix {
 				char[] charArray = theChars.toCharArray();
 				int dec2 = 0;
 				for (int y = 0; y < theSize; y++) {
-					System.out.println("in cut2");
+					
 					clipBoard.add(charArray[y]);	
-					System.out.println(clipBoard);
+					
 				}
 				
 			//clipBoard has [ , i, s, , a, ]
 				for (int z = theSize-1; z >=0; z--){
 					
-					System.out.println("in cut" + z);
+					
 				theMessage.add(locToPaste - 2,clipBoard.get(z));
-				System.out.println(theMessage);
+				
 				
 				}
 			}
@@ -215,9 +215,14 @@ public class UnMix {
 		System.out.println("clipBoard: " + clipBoard);
 		System.out.println(theMessage);
 		
-		String finalString = theMessage.toString();
-		
-		//System.out.println("The original Message is: " +finalString);
+		char[] array = new char[theMessage.size()];
+		for (int i = 0; i < theMessage.size(); i++) {
+		    array[i] = (char) theMessage.get(i);
+		}
+	
+		String finalString = new String(array);
+	
+		System.out.println("The original Message is: " +finalString);
 
 	}
 	public void setCbSize(int size) {

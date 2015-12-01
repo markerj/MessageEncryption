@@ -23,8 +23,7 @@ public class Mix implements IMix {
 	public boolean isPasting = false;
 	public boolean isPastingInIb = false;
 	public boolean isCutting = false;
-	//String[] commandsArray;
-	//ArrayList<String> clipBoard;
+	public boolean quit = false;
 	String finalMsg;
 	ArrayList<String> elements;
 	ArrayList<Character> copiedChars;
@@ -52,24 +51,23 @@ public class Mix implements IMix {
 			System.out.print("command: ");
 			String s1 = scan.nextLine();
 			if (isPastingInIb != true && isCutting != true){
-			elements.add(s1);
+				elements.add(s1);
 			}
-			
-			System.out.println("in the mixer method: " + elements);
+
+			//System.out.println("in the mixer method: " + elements);
 			//clipBoard.add(s1);
 			//commandsArray[i] = s1;
 
 			processCommand(s1);
 			i++;
 			createNumsLL();
-			if(isSaved == false) {
+			if(isSaved == false && quit == false) {
 				numbers.displayNum();
 				System.out.println();
 				message.display();
 				System.out.println();
 			}
-			System.out.println("in the mixer method: " + elements);
-
+	
 		}
 	}
 	public void removeAtPosition(int pos) {
@@ -80,12 +78,9 @@ public class Mix implements IMix {
 
 		String undoCmd = ("addR" + lpar + pos + "|" + charToAdd + rpar);
 		if(isCutting == false) {
-		elements.add(undoCmd);
+			elements.add(undoCmd);
 		}
 		message.remove(pos);
-
-		System.out.println("in the remove method: " + elements);
-
 	}
 
 	public void quit() {
@@ -99,11 +94,8 @@ public class Mix implements IMix {
 		}
 		String finMsg = new String(chars);
 		finalMsg = finMsg;
-
-		//System.out.println(finMsg);
-
-		System.out.println("Final encrypted message:");
-		//message.display();
+		System.out.println("Final encrypted message:" + finalMsg);
+		quit = true;
 	}
 
 	public int getSize() {
@@ -116,21 +108,17 @@ public class Mix implements IMix {
 		return message.get(pos);
 	}
 	public void insertBefore(char c, int pos) {
-		
+
 		//char charToAdd = message.get(pos);
 		char lpar = '(';
 		char rpar = ')';
 
 		String undoCmd = ("addIb" + lpar + pos + "|" + c + rpar);
 		if(isPastingInIb == false) {
-		elements.add(undoCmd);
-		
+			elements.add(undoCmd);
 		}
-		
+
 		message.insertBeforeIndex(c, pos-1);
-		
-		System.out.println("in the insert method: " + elements);
-	
 	}
 
 	public void switchAt(int pos, char c) {
@@ -138,15 +126,13 @@ public class Mix implements IMix {
 		char lpar = '(';
 		char rpar = ')';
 		char oldChar = message.get(pos);
-		System.out.println("oldChar:" + oldChar);
+
 		String undoCmd = ("addS" + lpar + pos + "|" + oldChar + rpar);
 
 		elements.add(undoCmd);
 		message.switchIt(pos, c);
 		//have to get element at pos and then pass that to undo
-		System.out.println("in the switch method: " + elements);
-		//message.display();
-		//System.out.println();
+
 	}
 	public void cut(int pos, int pos2) {
 		isCutting(true);
@@ -167,7 +153,7 @@ public class Mix implements IMix {
 
 			i1++;
 		}
-		
+
 		char lpar = '(';
 		char rpar = ')';
 		//pass copied chars for undo, have to pass starting pos as well
@@ -183,7 +169,7 @@ public class Mix implements IMix {
 		String undoCmd = ("cut" + lpar + pos3 + "|" + sizeOfString + "|" + intoString+ rpar);
 		elements.add(undoCmd);
 
-		System.out.println("clipBoard: " +copiedChars);
+		//System.out.println("clipBoard: " +copiedChars);
 		isCutting(false);
 	}
 	public void copy(int pos, int pos2) {
@@ -196,7 +182,7 @@ public class Mix implements IMix {
 			copiedChars.add(getChar(i));
 			i++;
 		}
-		System.out.println("clipBoard: " +copiedChars);
+
 		char lpar = '(';
 		char rpar = ')';
 		//pass copied chars for undo, have to pass starting pos as well
@@ -218,7 +204,7 @@ public class Mix implements IMix {
 			isCutting = true;
 		}
 		if (bool == false) {
-		isCutting = false;
+			isCutting = false;
 		}
 	}
 	public void isPastingIb(boolean bool) {
@@ -227,7 +213,7 @@ public class Mix implements IMix {
 			isPastingInIb = true;
 		}
 		if (bool == false) {
-		isPastingInIb = false;
+			isPastingInIb = false;
 		}
 	}
 	public void paste(int pos) {
@@ -243,16 +229,16 @@ public class Mix implements IMix {
 		}
 		char lpar = '(';
 		char rpar = ')';
-        //maybe pass clip size from here
+		//maybe pass clip size from here
 		int lenOC= copiedChars.size();
 		String lengthOfCopy = Integer.toString(lenOC);
-				
+
 		String undoCmd = ("paste" + lpar + pos + "|" + lengthOfCopy + rpar);
 
 		elements.add(undoCmd);
 		isPastingIb(false);
-		
-	
+
+
 	}
 
 	@Override
@@ -338,7 +324,7 @@ public class Mix implements IMix {
 				elements.remove(elements.get(i));
 			}
 			elements.add(finalMsg);
-			System.out.println("its writing if list here: " +elements);
+
 			pr.println(elements);
 
 			//pr.println(finalMsg);
@@ -367,10 +353,8 @@ public class Mix implements IMix {
 			nums[i] = i;
 		}
 		charMsg = message1.toCharArray();
-
 		numbers = new LinkedListNum();
 		for (int i = 1; i < size2; i++) {
-
 			numbers.add(nums[i]);
 
 		}
