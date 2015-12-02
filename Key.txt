@@ -1,1 +1,1 @@
-[copy(8| is a me), cut(6|5| is a), paste(2|5), t is ahis message]
+[cut(22|8|message ), paste(12|8), addR(14|s), addS(4| ), addIb(2|e), addR(7|s), tehisbi an mesage ecrypted right here]

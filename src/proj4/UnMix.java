@@ -245,7 +245,7 @@ public class UnMix {
 				else if (commands.get(i).substring(7, 8).contains(",")){
 					sizeOfCopy = commands.get(i).substring(5,7);
 					theSize = Integer.parseInt(sizeOfCopy);
-					theChars = commands.get(i).substring(7,7+theSize);
+					theChars = commands.get(i).substring(8,8+theSize);
 					charArray = theChars.toCharArray();
 
 					for (int y = 0; y < theSize; y++) {
@@ -264,7 +264,8 @@ public class UnMix {
 				String theChars;
 				char[] charArray;
 
-				if (commands.get(i).substring(5,6).contains(",")){
+				if (commands.get(i).substring(5,6).contains(",")
+						&& commands.get(i).substring(7,8).contains(",")){
 					loc = commands.get(i).substring(4,5);
 					locToPaste = Integer.parseInt(loc);
 					sizeOfCopy = commands.get(i).substring(6,7);
@@ -282,9 +283,11 @@ public class UnMix {
 				else if (commands.get(i).substring(6,7).contains(",")){
 					loc = commands.get(i).substring(4,6);
 					locToPaste = Integer.parseInt(loc);
-					sizeOfCopy = commands.get(i).substring(6,7);
+					
+					sizeOfCopy = commands.get(i).substring(7,8);
 					theSize = Integer.parseInt(sizeOfCopy);
-					theChars = commands.get(i).substring(8,8+theSize);
+					
+					theChars = commands.get(i).substring(9,9+theSize);
 					charArray = theChars.toCharArray();
 
 					for (int y = 0; y < theSize; y++) {
@@ -292,7 +295,24 @@ public class UnMix {
 					}
 					for (int z = theSize-1; z >=0; z--){
 						theMessage.add(locToPaste - 2,clipBoard.get(z));
-					}		
+					}	
+				}
+					else if (commands.get(i).substring(6,7).contains(",")){
+						loc = commands.get(i).substring(4,6);
+						locToPaste = Integer.parseInt(loc);
+						
+						sizeOfCopy = commands.get(i).substring(7,8);
+						theSize = Integer.parseInt(sizeOfCopy);
+						
+						theChars = commands.get(i).substring(9,9+theSize);
+						charArray = theChars.toCharArray();
+
+						for (int y = 0; y < theSize; y++) {
+							clipBoard.add(charArray[y]);	
+						}
+						for (int z = theSize-1; z >=0; z--){
+							theMessage.add(locToPaste - 2,clipBoard.get(z));
+						}		
 			}
 		}
 		if (commands.get(i).contains("paste")) {
