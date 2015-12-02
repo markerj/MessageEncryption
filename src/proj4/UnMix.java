@@ -49,7 +49,7 @@ public class UnMix {
 
 	/** holds the size of clipboard */
 	int sizeOfClipB = 0;
-	
+
 	/** holds the final message */
 	String finalMessage = null;
 
@@ -138,160 +138,247 @@ public class UnMix {
 
 		for (int i = commands.size()-1; i >= 0; i--) {
 			if (commands.get(i).contains("addR")) {
+				String forInt;
+				int posToAdd;
+				char charToAdd;
+				if (commands.get(i).length() == 9) {
+					forInt = commands.get(i).substring(5,6);
+					posToAdd = Integer.parseInt(forInt);
+					charToAdd = commands.get(i).charAt(7);
 
-				if ( i > 0) {
-					String forInt = commands.get(i).substring(5,6);
-					int posToAdd = Integer.parseInt(forInt);
-					char charToAdd = commands.get(i).charAt(7);
-					//inc ++;
-					theMessage.add(posToAdd+inc,charToAdd);
+					if ( i > 0) {
+						theMessage.add(posToAdd+inc,charToAdd);
+					}
+					if (i == 0){
+						theMessage.add(posToAdd,charToAdd);
+					}
 				}
-				if (i == 0){
-					String forInt = commands.get(i).substring(5,6);
-					int posToAdd = Integer.parseInt(forInt);
-					char charToAdd = commands.get(i).charAt(7);
-					theMessage.add(posToAdd,charToAdd);
-				}
-				sizeOfIt++;
-				//System.out.println(theMessage);
+
+				else if( commands.get(i).length() >9){
+
+					forInt = commands.get(i).substring(5,7);
+					posToAdd = Integer.parseInt(forInt);
+					charToAdd = commands.get(i).charAt(8);
+					if ( i > 0) {	
+						theMessage.add(posToAdd+inc,charToAdd);
+					}
+					if (i == 0){
+						theMessage.add(posToAdd,charToAdd);
+					}
+				}	
 
 			}
 			int dec = 0;
 			if (commands.get(i).contains("addIb")) {
-
-				//System.out.println("in addib");
-				String forInt = commands.get(i).substring(6,7);
-				int posToRem = Integer.parseInt(forInt);
-				//dec--;
-				theMessage.remove(posToRem-1);
-				//System.out.println(theMessage);
+				String forInt;
+				int posToRem;
+				if (commands.get(i).length() == 10) {
+					forInt = commands.get(i).substring(6,7);
+					posToRem = Integer.parseInt(forInt);
+					theMessage.remove(posToRem-1);
+				}
+				else if (commands.get(i).length() > 10) {
+					forInt = commands.get(i).substring(6,8);
+					posToRem = Integer.parseInt(forInt);
+					theMessage.remove(posToRem-1);
+				}
 			}
 			if (commands.get(i).contains("addS")) {
-				int dec1 = 0;
-				//System.out.println("in switch");
-				if ( i > 0) {
-					String forInt = commands.get(i).substring(5,6);
-					int posToRem = Integer.parseInt(forInt);
-					char charToAdd = commands.get(i).charAt(7);
-					dec1++;
-					theMessage.remove(posToRem-dec);
-					theMessage.add(posToRem-dec,charToAdd);
-					//theMessage.add(posToAdd,charToAdd);
+
+				String forInt;
+				int posToRem;
+				char charToAdd;
+				if (commands.get(i).length() == 9) {
+					forInt = commands.get(i).substring(5,6);
+					posToRem = Integer.parseInt(forInt);
+					charToAdd = commands.get(i).charAt(7);
+
+					if ( i > 0) {
+
+						theMessage.remove(posToRem-dec);
+						theMessage.add(posToRem-dec,charToAdd);
+						//theMessage.add(posToAdd,charToAdd);
+					}
+					if (i == 0){
+
+						theMessage.remove(posToRem);
+						theMessage.add(posToRem, charToAdd);
+					}
 				}
-				if (i == 0){
-					String forInt = commands.get(i).substring(5,6);
-					int posToRem = Integer.parseInt(forInt);
-					char charToAdd = commands.get(i).charAt(7);
-					theMessage.remove(posToRem);
-					theMessage.add(posToRem, charToAdd);
+				else if( commands.get(i).length() >9) {
+					forInt = commands.get(i).substring(5,7);
+					posToRem = Integer.parseInt(forInt);
+					charToAdd = commands.get(i).charAt(8);
+
+					if ( i > 0) {
+
+						theMessage.remove(posToRem-dec);
+						theMessage.add(posToRem-dec,charToAdd);
+						//theMessage.add(posToAdd,charToAdd);
+					}
+					if (i == 0){
+
+						theMessage.remove(posToRem);
+						theMessage.add(posToRem, charToAdd);
+					}
 				}
 				//System.out.println(theMessage);
 
 			}
 			if (commands.get(i).contains("copy")) {
-				String sizeOfCopy = commands.get(i).substring(5,6);
-				int theSize = Integer.parseInt(sizeOfCopy);
-				String theChars = commands.get(i).substring(7,7+theSize);
+				String sizeOfCopy;
+				int theSize;
+				String theChars;
+				char[] charArray;
+				if (commands.get(i).substring(6, 7).contains(",")){
+					sizeOfCopy = commands.get(i).substring(5,6);
+					theSize = Integer.parseInt(sizeOfCopy);
+					theChars = commands.get(i).substring(7,7+theSize);
+					charArray = theChars.toCharArray();
 
-				char[] charArray = theChars.toCharArray();
+					for (int y = 0; y < theSize; y++) {
+						clipBoard.add(charArray[y]);
+						sizeOfClipB++;
+						setCbSize(sizeOfClipB);
+					}
+				}
+				else if (commands.get(i).substring(7, 8).contains(",")){
+					sizeOfCopy = commands.get(i).substring(5,7);
+					theSize = Integer.parseInt(sizeOfCopy);
+					theChars = commands.get(i).substring(7,7+theSize);
+					charArray = theChars.toCharArray();
 
-				for (int y = 0; y < theSize; y++) {
-					clipBoard.add(charArray[y]);
-					sizeOfClipB++;
-					setCbSize(sizeOfClipB);
+					for (int y = 0; y < theSize; y++) {
+						clipBoard.add(charArray[y]);
+						sizeOfClipB++;
+						setCbSize(sizeOfClipB);
+					}
 				}
 
 			}
 			if (commands.get(i).contains("cut")) {
+				String loc;
+				int locToPaste;
+				String sizeOfCopy;
+				int theSize;
+				String theChars;
+				char[] charArray;
 
-				String loc = commands.get(i).substring(4,5);
-				int locToPaste = Integer.parseInt(loc);
-				String sizeOfCopy = commands.get(i).substring(6,7);
-				int theSize = Integer.parseInt(sizeOfCopy);
+				if (commands.get(i).substring(5,6).contains(",")){
+					loc = commands.get(i).substring(4,5);
+					locToPaste = Integer.parseInt(loc);
+					sizeOfCopy = commands.get(i).substring(6,7);
+					theSize = Integer.parseInt(sizeOfCopy);
+					theChars = commands.get(i).substring(8,8+theSize);
+					charArray = theChars.toCharArray();
 
-				String theChars = commands.get(i).substring(8,8+theSize);
-				char[] charArray = theChars.toCharArray();
-				int dec2 = 0;
-				for (int y = 0; y < theSize; y++) {
-					clipBoard.add(charArray[y]);	
+					for (int y = 0; y < theSize; y++) {
+						clipBoard.add(charArray[y]);	
+					}
+					for (int z = theSize-1; z >=0; z--){
+						theMessage.add(locToPaste - 2,clipBoard.get(z));
+					}
 				}
-				for (int z = theSize-1; z >=0; z--){
-					theMessage.add(locToPaste - 2,clipBoard.get(z));
-				}
+				else if (commands.get(i).substring(6,7).contains(",")){
+					loc = commands.get(i).substring(4,6);
+					locToPaste = Integer.parseInt(loc);
+					sizeOfCopy = commands.get(i).substring(6,7);
+					theSize = Integer.parseInt(sizeOfCopy);
+					theChars = commands.get(i).substring(8,8+theSize);
+					charArray = theChars.toCharArray();
+
+					for (int y = 0; y < theSize; y++) {
+						clipBoard.add(charArray[y]);	
+					}
+					for (int z = theSize-1; z >=0; z--){
+						theMessage.add(locToPaste - 2,clipBoard.get(z));
+					}		
 			}
-			if (commands.get(i).contains("paste")) {
+		}
+		if (commands.get(i).contains("paste")) {
 
-				//have to remove same element theLen times
+			//have to remove same element theLen times
+
+			int locToUnpaste;
+			int theLen;
+			if (commands.get(i).length()< 11) {
+
 				String loc = commands.get(i).substring(6,7);
-				int locToUnpaste = Integer.parseInt(loc);
+				locToUnpaste = Integer.parseInt(loc);
 				String len = commands.get(i).substring(8,9);
-				int theLen = Integer.parseInt(len);
-
-				int g = 0;
-				while (g < theLen){
-
-					//System.out.println(g);
-
-					g++;
-					theMessage.remove(locToUnpaste-1);
-
-				}
-
+				theLen = Integer.parseInt(len);
 			}
-			//cut is where i need to use what is on the clipBoard.
-			//cut means to add the clipboard to the list
+			else {
+				String loc = commands.get(i).substring(6,8);
+				locToUnpaste = Integer.parseInt(loc);
+				String len = commands.get(i).substring(9,10);
+				theLen = Integer.parseInt(len);
+			}
+
+			int g = 0;
+			while (g < theLen){
+
+				//System.out.println(g);
+
+				g++;
+				theMessage.remove(locToUnpaste-1);
+				clipBoard.clear();
+			}
 		}
-		System.out.println("clipBoard: " + clipBoard);
-		//	System.out.println(theMessage);
-		//convert linkedlist to a final message
-		char[] array = new char[theMessage.size()];
-		for (int i = 0; i < theMessage.size(); i++) {
-			array[i] = (char) theMessage.get(i);
-		}
-		String finalString = new String(array);
-		System.out.println("The original Message was: " +finalString);
-		UnMixUsingFile(finalString);
-		finalMessage = finalString;
+		//cut is where i need to use what is on the clipBoard.
+		//cut means to add the clipboard to the list
 	}
+	System.out.println("clipBoard: " + clipBoard);
+	//	System.out.println(theMessage);
+	//convert linkedlist to a final message
+	char[] array = new char[theMessage.size()];
+	for (int i = 0; i < theMessage.size(); i++) {
+		array[i] = (char) theMessage.get(i);
+	}
+	String finalString = new String(array);
+	System.out.println("The original Message was: " +finalString);
+	UnMixUsingFile(finalString);
+	finalMessage = finalString;
+}
 
 
-	/*****************************************************************
+/*****************************************************************
 	sets the clipBoard size
 	@param size to be set
-	 *****************************************************************/
-	public void setCbSize(int size) {
+ *****************************************************************/
+public void setCbSize(int size) {
 
-		sizeOfClipB = size;
-	}
+	sizeOfClipB = size;
+}
 
 
-	/*****************************************************************
+/*****************************************************************
 	gets the size of clipboard
 	@return the size of the clipboard
-	 *****************************************************************/
-	public int getCbSize() {
+ *****************************************************************/
+public int getCbSize() {
 
-		return sizeOfClipB;
-	}
+	return sizeOfClipB;
+}
 
 
 
-	/*****************************************************************
+/*****************************************************************
 	reads the file given by user input from scanner
 	@param theFile si the name of the file given by the user
-	 *****************************************************************/
-	public void readMixed(String theFile) throws FileNotFoundException {
+ *****************************************************************/
+public void readMixed(String theFile) throws FileNotFoundException {
 
-		//if thefile is wrong file name, no such file will be found
-		String each = "";
-		Scanner inFile1 = new Scanner(new File(theFile + ".txt")).useDelimiter(",");
+	//if thefile is wrong file name, no such file will be found
+	String each = "";
+	Scanner inFile1 = new Scanner(new File(theFile + ".txt")).useDelimiter(",");
 
-		while (inFile1.hasNext()) {
-			each = inFile1.next();
-			temps.add(each);
-
-		}
-		inFile1.close();
+	while (inFile1.hasNext()) {
+		each = inFile1.next();
+		temps.add(each);
 
 	}
+	inFile1.close();
+
+}
 }

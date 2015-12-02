@@ -1,1 +1,1 @@
-[addR(11|e), this is a mssage]
+[copy(8| is a me), cut(6|5| is a), paste(2|5), t is ahis message]

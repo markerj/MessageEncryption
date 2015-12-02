@@ -96,7 +96,8 @@ public class Mix implements IMix {
 		System.out.println("Enter message to be encrypted");
 		String s = scan.nextLine();
 		if (s.length()< 1) {
-			System.out.println("That's not a very useful message");
+			System.out.println("That's not a very useful message. "
+					+ "Try Again...");
 			runMixer();
 		}
 		setInitialMessage(s);
@@ -106,6 +107,9 @@ public class Mix implements IMix {
 			System.out.print("command: ");
 			String s1 = scan.nextLine();
 
+
+			//booleans needed to seperate cutting and pasting
+			//from removing and inserting
 			if (isPastingInIb != true && isCutting != true){
 				elements.add(s1);
 			}
@@ -118,25 +122,17 @@ public class Mix implements IMix {
 			}
 
 			catch (IllegalArgumentException e){
-				System.out.println("invalid command");
+				System.out.println("invalid command. "+ "Try Again...");
 				elements.remove(s1);
 			}
 			catch (ArrayIndexOutOfBoundsException e){
-				System.out.println("incomplete command");
+				System.out.println("incomplete command. "+ "Try Again...");
 				elements.remove(s1);
 			}
 			catch (StringIndexOutOfBoundsException e){
-				System.out.println("incomplete command");
+				System.out.println("incomplete command. "+ "Try Again...");
 				elements.remove(s1);
 			}
-
-
-			//booleans needed to seperate cutting and pasting
-			//from removing and inserting
-			//			if (isPastingInIb != true && isCutting != true){
-			//				elements.add(s1);
-			//			}
-
 
 			//booleans needed to stop user input
 			//when the user has quit and saved the message
@@ -487,6 +483,7 @@ public class Mix implements IMix {
 			//save to text file ....
 			if(command.substring(0,1).contains("s"))
 			{
+				
 				//save commands, and final mixed msg
 				String fileN = command.substring(2,command.length());
 				saveToText(fileN);
